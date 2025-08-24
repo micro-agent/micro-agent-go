@@ -44,14 +44,13 @@ func NewA2AServer(port int, agentCard AgentCard, agentCallback func(taskRequest 
 }
 
 // NewA2AServerWithStreaming creates a new A2A server with streaming support
-func NewA2AServerWithStreaming(port int, agentCard AgentCard, agentCallback func(taskRequest TaskRequest) (TaskResponse, error), agentStreamCallback func(taskRequest TaskRequest, streamFunc func(content string) error) error) *A2AServer {
+func NewA2AServerWithStreaming(port int, agentCard AgentCard, agentStreamCallback func(taskRequest TaskRequest, streamFunc func(content string) error) error) *A2AServer {
 	mux := http.NewServeMux()
 	server := &A2AServer{
 		httpPort: port,
 		//Host:          host,
 		httpServer:          mux,
 		agentCard:           agentCard,
-		agentCallback:       agentCallback,
 		agentStreamCallback: agentStreamCallback,
 	}
 	// Register handlers
