@@ -1,0 +1,7 @@
+- get a documents
+then send this doc to the mcp server
+the server will chunk and create embeddings 
+and make a similarity search with the question 
+then return the informations
+
+and save everything for reuse 

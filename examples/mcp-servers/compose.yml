@@ -1,0 +1,82 @@
+services:
+
+  mcp-gateway:
+    # mcp-gateway secures your MCP servers
+    image: docker/mcp-gateway:latest
+    ports:
+      - 9011:9011
+    command:
+      - --port=9011
+      - --transport=streaming
+      - --verbose
+      - --catalog=/mcp/catalog.yaml
+      - --servers=mcp-rag,mcp-snippets
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./catalog.yaml:/mcp/catalog.yaml
+
+    depends_on:
+      mcp-rag:
+        condition: service_healthy
+      mcp-snippets:
+        condition: service_healthy
+
+  mcp-rag:
+    build:
+      context: mcp-rag-server
+      dockerfile: Dockerfile
+      # platforms:
+      #   - "linux/arm64"      
+    environment:
+      - MCP_HTTP_PORT=6060
+      - LIMIT=0.5
+      - MAX_RESULTS=5
+      - JSON_STORE_FILE_PATH=store/rag-memory-store.json
+      - DOCUMENTS_PATH=markdown
+      - CHUNK_SIZE=512
+      - CHUNK_OVERLAP=128 
+    volumes:
+      - ./data/markdown:/app/markdown
+      - ./data/rag-store:/app/store
+    models:
+      granite-embedding:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: EMBEDDING_MODEL
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6060/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  mcp-snippets:
+    build:
+      context: mcp-snippets-server
+      dockerfile: Dockerfile
+      # platforms:
+      #   - "linux/arm64"
+    environment:
+      - MCP_HTTP_PORT=6060
+      - LIMIT=0.5
+      - MAX_RESULTS=2
+      - JSON_STORE_FILE_PATH=store/rag-memory-store.json
+    volumes:
+      - ./data/snippets:/app/snippets
+      - ./data/snippets-store:/app/store
+    models:
+      mxbai-embed:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: EMBEDDING_MODEL
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6060/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  
+models:
+  granite-embedding:
+    model: ai/granite-embedding-multilingual:latest
+  mxbai-embed:
+    model: ai/mxbai-embed-large:latest    

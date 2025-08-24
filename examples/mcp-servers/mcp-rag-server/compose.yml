@@ -1,0 +1,33 @@
+services:
+
+  mcp-rag-server:
+    build:
+      context: .
+      platforms:
+        #- "linux/amd64"
+        - "linux/arm64"
+      dockerfile: Dockerfile
+    ports:
+      - 9095:6060
+    environment:
+      - MCP_HTTP_PORT=6060
+      - LIMIT=0.5
+      - MAX_RESULTS=5
+      - JSON_STORE_FILE_PATH=store/rag-memory-store.json
+      - DOCUMENTS_PATH=markdown
+      - CHUNK_SIZE=512
+      - CHUNK_OVERLAP=128
+    volumes:
+      - ./markdown:/app/markdown
+      - ./store:/app/store
+
+    models:
+      granite-embedding:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: EMBEDDING_MODEL
+
+models:
+  granite-embedding:
+    model: ai/granite-embedding-multilingual:latest
+
+
