@@ -6,6 +6,20 @@
 
 > You can use any LLM provider compatible with OpenAI API - I mainly work with [Docker Model Runner](https://docs.docker.com/ai/model-runner/).
 
+## Installation
+
+To install the Micro Agent library, use `go get`:
+
+```bash
+go get github.com/micro-agent/micro-agent-go
+```
+
+Then import it in your Go code:
+
+```go
+import mu "github.com/micro-agent/micro-agent-go"
+```
+
 ## Quick Start Example
 
 ```go
