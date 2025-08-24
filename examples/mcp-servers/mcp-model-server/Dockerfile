@@ -14,8 +14,9 @@ GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build
 EOF
 
 FROM alpine:latest
-RUN apk --no-cache add ca-certificates wget
+# for health check
+RUN apk --no-cache add ca-certificates wget 
 WORKDIR /app
-COPY --from=builder /app/mcp-snippets-server .
-ENTRYPOINT ["./mcp-snippets-server"]
-# docker build --platform linux/arm64 -t mcp-snippets:demo .
+COPY --from=builder /app/mcp-model-server .
+ENTRYPOINT ["./mcp-model-server"]
+# docker build --platform linux/arm64 -t mcp-model:demo .

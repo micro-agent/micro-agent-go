@@ -17,7 +17,7 @@ go get github.com/micro-agent/micro-agent-go
 Then import it in your Go code:
 
 ```go
-import mu "github.com/micro-agent/micro-agent-go"
+import mu "github.com/micro-agent/micro-agent-go/agent/mu"
 ```
 
 ## Quick Start Example

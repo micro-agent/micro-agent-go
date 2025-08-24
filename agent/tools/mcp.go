@@ -63,6 +63,11 @@ func (c *MCPClient) OpenAITools() []openai.ChatCompletionToolUnionParam {
 	return ConvertMCPToolsToOpenAITools(c.ToolsResult)
 }
 
+// OpenAIToolsWithFilter converts only the filtered MCP tools to OpenAI-compatible format
+func (c *MCPClient) OpenAIToolsWithFilter(toolsFilter []string) []openai.ChatCompletionToolUnionParam {
+	return ConvertMCPToolsToOpenAIToolsWithFilter(c.ToolsResult, toolsFilter)
+}
+
 // Close safely closes the MCP client connection
 func (c *MCPClient) Close() error {
 	if c.mcpclient != nil {
@@ -111,6 +116,33 @@ func ConvertMCPToolsToOpenAITools(tools *mcp.ListToolsResult) []openai.ChatCompl
 			},
 		},
 		)
+	}
+	return openAITools
+}
+
+// ConvertMCPToolsToOpenAIToolsWithFilter transforms filtered MCP tool definitions into OpenAI tool format
+func ConvertMCPToolsToOpenAIToolsWithFilter(tools *mcp.ListToolsResult, toolsFilter []string) []openai.ChatCompletionToolUnionParam {
+	// Create a set for quick lookup of allowed tool names
+	allowedTools := make(map[string]bool)
+	for _, name := range toolsFilter {
+		allowedTools[name] = true
+	}
+
+	// Filter tools and convert to OpenAI format
+	var openAITools []openai.ChatCompletionToolUnionParam
+	for _, tool := range tools.Tools {
+		if allowedTools[tool.Name] {
+			openAITools = append(openAITools, openai.ChatCompletionFunctionTool(shared.FunctionDefinitionParam{
+				Name:        tool.Name,
+				Description: openai.String(tool.Description),
+				Parameters: shared.FunctionParameters{
+					"type":       "object",
+					"properties": tool.InputSchema.Properties,
+					"required":   tool.InputSchema.Required,
+				},
+			},
+			))
+		}
 	}
 	return openAITools
 }

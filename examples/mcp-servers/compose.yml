@@ -10,7 +10,7 @@ services:
       - --transport=streaming
       - --verbose
       - --catalog=/mcp/catalog.yaml
-      - --servers=mcp-rag,mcp-snippets
+      - --servers=mcp-rag,mcp-snippets,mcp-model
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -20,6 +20,8 @@ services:
       mcp-rag:
         condition: service_healthy
       mcp-snippets:
+        condition: service_healthy
+      mcp-model:
         condition: service_healthy
 
   mcp-rag:
@@ -74,9 +76,33 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-  
+
+  mcp-model:
+    build:
+      context: mcp-model-server
+      dockerfile: Dockerfile
+    environment:
+      MCP_HTTP_PORT: 6060
+      SYSTEM_INSTRUCTION: |
+        Your name is Bob, you are a helpful assistant.
+        You are a Pizza expert.
+        You answer questions about Pizza.
+    models:
+      qwen2_5_0_5b:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: CHAT_MODEL
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6060/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+
 models:
   granite-embedding:
     model: ai/granite-embedding-multilingual:latest
   mxbai-embed:
-    model: ai/mxbai-embed-large:latest    
+    model: ai/mxbai-embed-large:latest
+  qwen2_5_0_5b:
+    model: ai/qwen2.5:0.5B-F16    

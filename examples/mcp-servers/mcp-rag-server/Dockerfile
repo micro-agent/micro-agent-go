@@ -18,4 +18,4 @@ RUN apk --no-cache add ca-certificates wget
 WORKDIR /app
 COPY --from=builder /app/mcp-rag-server .
 ENTRYPOINT ["./mcp-rag-server"]
-# docker build --platform linux/arm64 -t mcp-dungeon:demo .
+# docker build --platform linux/arm64 -t mcp-rag:demo .

@@ -269,7 +269,7 @@ func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	response := map[string]interface{}{
+	response := map[string]any{
 		"status":           "healthy",
 		"records":          len(store.Records),
 		"embeddings_model": embeddingsModel,

@@ -3,12 +3,18 @@ registry:
     remote:
       url: "http://mcp-rag:6060/mcp"
       transport_type: http
+
   mcp-snippets:
     remote:
       url: "http://mcp-snippets:6060/mcp"
       transport_type: http
-  mcp-files:
-  mcp-context7:
+
+  mcp-model:
     remote:
-      url: "http://mcp-context7:6060/mcp"
+      url: "http://mcp-model:6060/mcp"
       transport_type: http
+  
+  # mcp-context7:
+  #   remote:
+  #     url: "http://mcp-context7:6060/mcp"
+  #     transport_type: http
