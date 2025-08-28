@@ -63,7 +63,7 @@ func main() {
 		openai.UserMessage(content.Input),
 	}
 	/*
-		search a snippet for doing k33g program in Python,
+		search a snippet for doing hello world program in Python,
 		then generate a markdow document from the found snippet
 		and explain it	and sign with your name
 	*/

@@ -19,7 +19,7 @@ import (
 // This method temporarily sets the agent's Messages parameter and makes a synchronous
 // completion request. It returns an error if the completion fails or if the response
 // contains no choices.
-func (agent *Agent) Run(Messages []openai.ChatCompletionMessageParamUnion) (string, error) {
+func (agent *BasicAgent) Run(Messages []openai.ChatCompletionMessageParamUnion) (string, error) {
 	// Preserve existing system messages from agent.Params
 	existingSystemMessages := []openai.ChatCompletionMessageParamUnion{}
 	for _, msg := range agent.Params.Messages {

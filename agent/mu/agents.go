@@ -5,8 +5,21 @@ import (
 	"github.com/openai/openai-go/v2"
 )
 
-// Agent represents an AI agent with OpenAI client configuration and UI properties
-type Agent struct {
+// Agent is the interface for AI agents that can interact with OpenAI models and tools
+type Agent interface {
+	Run(Messages []openai.ChatCompletionMessageParamUnion) (string, error)
+	RunStream(Messages []openai.ChatCompletionMessageParamUnion, callBack func(content string) error) (string, error)
+	RunWithReasoning(Messages []openai.ChatCompletionMessageParamUnion) (string, string, error)
+	RunStreamWithReasoning(Messages []openai.ChatCompletionMessageParamUnion, contentCallback func(content string) error, reasoningCallback func(reasoning string) error) (string, string, error)
+	DetectToolCalls(messages []openai.ChatCompletionMessageParamUnion, toolCallBack func(functionName string, arguments string) (string, error)) (string, []string, string, error)
+	DetectToolCallsStream(messages []openai.ChatCompletionMessageParamUnion, toolCallback func(functionName string, arguments string) (string, error), streamCallback func(content string) error) (string, []string, string, error)
+	GenerateEmbeddingVector(content string) ([]float64, error)
+	GetMessages() []openai.ChatCompletionMessageParamUnion
+	SetMessages(messages []openai.ChatCompletionMessageParamUnion)
+}
+
+// BasicAgent represents a basic implementation of Agent with OpenAI client configuration and UI properties
+type BasicAgent struct {
 	ctx             context.Context
 	Client          openai.Client
 	Params          openai.ChatCompletionNewParams
@@ -16,8 +29,8 @@ type Agent struct {
 	Color           string // used for UI display
 }
 
-// AgentOption is a functional option for configuring Agent instances
-type AgentOption func(*Agent)
+// AgentOption is a functional option for configuring BasicAgent instances
+type AgentOption func(*BasicAgent)
 
 // NewAgent creates a new Agent instance with the specified configuration.
 // It uses the functional options pattern to configure the agent's client, parameters, and other settings.
@@ -28,7 +41,7 @@ type AgentOption func(*Agent)
 //   - options: Variable number of AgentOption functions to configure the agent
 //
 // Returns:
-//   - *Agent: Configured agent instance ready for use
+//   - Agent: Configured agent instance ready for use
 //   - error: Always nil in current implementation, reserved for future validation
 //
 // Example usage:
@@ -37,9 +50,9 @@ type AgentOption func(*Agent)
 //	  WithClient(openaiClient),
 //	  WithParams(completionParams),
 //	)
-func NewAgent(ctx context.Context, name string, options ...AgentOption) (*Agent, error) {
+func NewAgent(ctx context.Context, name string, options ...AgentOption) (Agent, error) {
 
-	agent := &Agent{}
+	agent := &BasicAgent{}
 	agent.Name = name
 	agent.ctx = ctx
 	// Apply all options
@@ -64,7 +77,7 @@ func NewAgent(ctx context.Context, name string, options ...AgentOption) (*Agent,
 //	client := openai.NewClient(option.WithAPIKey("your-api-key"))
 //	agent := NewAgent(ctx, "MyAgent", WithClient(client))
 func WithClient(client openai.Client) AgentOption {
-	return func(a *Agent) {
+	return func(a *BasicAgent) {
 		a.Client = client
 	}
 }
@@ -86,14 +99,24 @@ func WithClient(client openai.Client) AgentOption {
 //	  Tools: myTools,
 //	}))
 func WithParams(params openai.ChatCompletionNewParams) AgentOption {
-	return func(a *Agent) {
+	return func(a *BasicAgent) {
 		a.Params = params
 	}
 }
 
 // WithEmbeddingParams sets the embedding model parameters for the agent's vector generation
 func WithEmbeddingParams(embeddingParams openai.EmbeddingNewParams) AgentOption {
-	return func(a *Agent) {
+	return func(a *BasicAgent) {
 		a.EmbeddingParams = embeddingParams
 	}
+}
+
+// GetMessages returns the messages from the agent's parameters
+func (agent *BasicAgent) GetMessages() []openai.ChatCompletionMessageParamUnion {
+	return agent.Params.Messages
+}
+
+// SetMessages sets the messages in the agent's parameters
+func (agent *BasicAgent) SetMessages(messages []openai.ChatCompletionMessageParamUnion) {
+	agent.Params.Messages = messages
 }
