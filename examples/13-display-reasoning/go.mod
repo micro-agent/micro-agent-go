@@ -3,7 +3,7 @@ module simple-completion
 go 1.24.4
 
 require (
-	github.com/micro-agent/micro-agent-go v0.0.1
+	github.com/micro-agent/micro-agent-go v0.0.2
 	github.com/openai/openai-go/v2 v2.1.1
 )
 
