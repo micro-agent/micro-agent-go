@@ -58,16 +58,22 @@ func main() {
 		mu.WithParams(openai.ChatCompletionNewParams{
 			Model:       "ai/qwen2.5:1.5B-F16",
 			Temperature: openai.Opt(0.0),
-			ResponseFormat: openai.ChatCompletionNewParamsResponseFormatUnion{
-				OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
-					JSONSchema: schemaParam,
-				},
-			},
+			// ResponseFormat: openai.ChatCompletionNewParamsResponseFormatUnion{
+			// 	OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
+			// 		JSONSchema: schemaParam,
+			// 	},
+			// },
 		}),
 	)
 	if err != nil {
 		panic(err)
 	}
+
+	chatAgent.SetResponseFormat(openai.ChatCompletionNewParamsResponseFormatUnion{
+		OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
+			JSONSchema: schemaParam,
+		},
+	})
 
 	response, err := chatAgent.Run([]openai.ChatCompletionMessageParamUnion{
 		openai.SystemMessage(`

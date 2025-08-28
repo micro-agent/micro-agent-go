@@ -12,8 +12,9 @@ import (
 // FakeAgent is a mock implementation of the mu.Agent interface
 // It simulates AI responses without making actual API calls
 type FakeAgent struct {
-	name     string
-	messages []openai.ChatCompletionMessageParamUnion
+	name           string
+	messages       []openai.ChatCompletionMessageParamUnion
+	responseFormat openai.ChatCompletionNewParamsResponseFormatUnion
 }
 
 // NewFakeAgent creates a new fake agent instance
@@ -270,6 +271,16 @@ func (f *FakeAgent) SetMessages(messages []openai.ChatCompletionMessageParamUnio
 	f.messages = messages
 }
 
+// GetResponseFormat returns the response format
+func (f *FakeAgent) GetResponseFormat() openai.ChatCompletionNewParamsResponseFormatUnion {
+	return f.responseFormat
+}
+
+// SetResponseFormat sets the response format
+func (f *FakeAgent) SetResponseFormat(format openai.ChatCompletionNewParamsResponseFormatUnion) {
+	f.responseFormat = format
+}
+
 // simulateResponse generates a fake AI response based on the input
 func (f *FakeAgent) simulateResponse(userMessage string) string {
 	responses := map[string]string{
@@ -385,7 +396,46 @@ func main() {
 	updatedMessages := fakeAgent.GetMessages()
 	fmt.Printf("Updated message count: %d\n", len(updatedMessages))
 	
+	// Test response format management
+	fmt.Println("\n7. Testing GetResponseFormat() and SetResponseFormat():")
+	
+	// Initially no format set
+	currentFormat := fakeAgent.GetResponseFormat()
+	fmt.Printf("Initial response format is empty: %v\n", currentFormat == openai.ChatCompletionNewParamsResponseFormatUnion{})
+	
+	// Set a JSON schema format (example)
+	jsonSchemaFormat := openai.ChatCompletionNewParamsResponseFormatUnion{
+		OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
+			JSONSchema: openai.ResponseFormatJSONSchemaJSONSchemaParam{
+				Name: "test_schema",
+				Schema: map[string]interface{}{
+					"type": "object",
+					"properties": map[string]interface{}{
+						"name": map[string]interface{}{
+							"type": "string",
+						},
+						"age": map[string]interface{}{
+							"type": "integer",
+						},
+					},
+					"required": []string{"name", "age"},
+				},
+			},
+		},
+	}
+	
+	fakeAgent.SetResponseFormat(jsonSchemaFormat)
+	
+	// Verify format was set
+	updatedFormat := fakeAgent.GetResponseFormat()
+	isJSONSchema := updatedFormat.OfJSONSchema != nil
+	fmt.Printf("JSON schema format set successfully: %v\n", isJSONSchema)
+	if isJSONSchema {
+		fmt.Printf("Schema name: %s\n", updatedFormat.OfJSONSchema.JSONSchema.Name)
+	}
+	
 	fmt.Println("\n✅ All fake agent methods tested successfully!")
 	fmt.Println("This demonstrates how the Agent interface can be implemented")
 	fmt.Println("with different backends - real AI services or fake/mock implementations.")
+	fmt.Println("Now you can use agent.SetResponseFormat() just like with dungeonAgent.Params.ResponseFormat!")
 }

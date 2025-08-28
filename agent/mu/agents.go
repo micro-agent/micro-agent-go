@@ -16,6 +16,8 @@ type Agent interface {
 	GenerateEmbeddingVector(content string) ([]float64, error)
 	GetMessages() []openai.ChatCompletionMessageParamUnion
 	SetMessages(messages []openai.ChatCompletionMessageParamUnion)
+	GetResponseFormat() openai.ChatCompletionNewParamsResponseFormatUnion
+	SetResponseFormat(format openai.ChatCompletionNewParamsResponseFormatUnion)
 }
 
 // BasicAgent represents a basic implementation of Agent with OpenAI client configuration and UI properties
@@ -119,4 +121,14 @@ func (agent *BasicAgent) GetMessages() []openai.ChatCompletionMessageParamUnion 
 // SetMessages sets the messages in the agent's parameters
 func (agent *BasicAgent) SetMessages(messages []openai.ChatCompletionMessageParamUnion) {
 	agent.Params.Messages = messages
+}
+
+// GetResponseFormat returns the response format from the agent's parameters
+func (agent *BasicAgent) GetResponseFormat() openai.ChatCompletionNewParamsResponseFormatUnion {
+	return agent.Params.ResponseFormat
+}
+
+// SetResponseFormat sets the response format in the agent's parameters
+func (agent *BasicAgent) SetResponseFormat(format openai.ChatCompletionNewParamsResponseFormatUnion) {
+	agent.Params.ResponseFormat = format
 }
