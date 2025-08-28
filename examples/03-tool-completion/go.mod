@@ -3,7 +3,7 @@ module tool-completion
 go 1.24.4
 
 require (
-	github.com/micro-agent/micro-agent-go v0.0.3
+	github.com/micro-agent/micro-agent-go v0.0.4
 	github.com/openai/openai-go/v2 v2.1.1
 )
 

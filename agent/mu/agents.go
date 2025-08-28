@@ -18,6 +18,8 @@ type Agent interface {
 	SetMessages(messages []openai.ChatCompletionMessageParamUnion)
 	GetResponseFormat() openai.ChatCompletionNewParamsResponseFormatUnion
 	SetResponseFormat(format openai.ChatCompletionNewParamsResponseFormatUnion)
+	GetName() string
+	SetName(name string)
 }
 
 // BasicAgent represents a basic implementation of Agent with OpenAI client configuration and UI properties
@@ -131,4 +133,14 @@ func (agent *BasicAgent) GetResponseFormat() openai.ChatCompletionNewParamsRespo
 // SetResponseFormat sets the response format in the agent's parameters
 func (agent *BasicAgent) SetResponseFormat(format openai.ChatCompletionNewParamsResponseFormatUnion) {
 	agent.Params.ResponseFormat = format
+}
+
+// GetName returns the name of the agent
+func (agent *BasicAgent) GetName() string {
+	return agent.Name
+}
+
+// SetName sets the name of the agent
+func (agent *BasicAgent) SetName(name string) {
+	agent.Name = name
 }

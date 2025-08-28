@@ -281,6 +281,16 @@ func (f *FakeAgent) SetResponseFormat(format openai.ChatCompletionNewParamsRespo
 	f.responseFormat = format
 }
 
+// GetName returns the name of the fake agent
+func (f *FakeAgent) GetName() string {
+	return f.name
+}
+
+// SetName sets the name of the fake agent
+func (f *FakeAgent) SetName(name string) {
+	f.name = name
+}
+
 // simulateResponse generates a fake AI response based on the input
 func (f *FakeAgent) simulateResponse(userMessage string) string {
 	responses := map[string]string{
@@ -434,8 +444,27 @@ func main() {
 		fmt.Printf("Schema name: %s\n", updatedFormat.OfJSONSchema.JSONSchema.Name)
 	}
 	
+	// Test name management
+	fmt.Println("\n8. Testing GetName() and SetName():")
+	currentName := fakeAgent.GetName()
+	fmt.Printf("Current agent name: %s\n", currentName)
+	
+	// Change the name
+	newName := "SuperFakeBot"
+	fakeAgent.SetName(newName)
+	
+	updatedName := fakeAgent.GetName()
+	fmt.Printf("Updated agent name: %s\n", updatedName)
+	
+	// Test that the name is used in responses
+	testMessage := []openai.ChatCompletionMessageParamUnion{
+		openai.UserMessage("hello"),
+	}
+	response, _ = fakeAgent.Run(testMessage)
+	fmt.Printf("Response with new name: %s\n", response)
+	
 	fmt.Println("\n✅ All fake agent methods tested successfully!")
 	fmt.Println("This demonstrates how the Agent interface can be implemented")
 	fmt.Println("with different backends - real AI services or fake/mock implementations.")
-	fmt.Println("Now you can use agent.SetResponseFormat() just like with dungeonAgent.Params.ResponseFormat!")
+	fmt.Println("Now you can use agent.SetResponseFormat() and agent.GetName()/SetName()!")
 }
