@@ -3,7 +3,7 @@ package mu
 import "github.com/openai/openai-go/v2"
 
 // GenerateEmbeddingVector creates a vector embedding for the given text content using the agent's embedding model
-func (agent *Agent) GenerateEmbeddingVector(content string) ([]float64, error) {
+func (agent *BasicAgent) GenerateEmbeddingVector(content string) ([]float64, error) {
 	// Create embedding parameters using the agent's embedding parameters
 	// params := openai.EmbeddingNewParams{
 	// 	Model: agent.EmbeddingParams.Model,

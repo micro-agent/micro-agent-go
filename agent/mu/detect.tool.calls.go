@@ -22,7 +22,7 @@ import (
 //   - results: Slice of all tool execution results (JSON strings)
 //   - lastAssistantMessage: The final message from the assistant when conversation ends normally
 //   - error: Any error that occurred during processing
-func (agent *Agent) DetectToolCalls(messages []openai.ChatCompletionMessageParamUnion, toolCallBack func(functionName string, arguments string) (string, error)) (string, []string, string, error) {
+func (agent *BasicAgent) DetectToolCalls(messages []openai.ChatCompletionMessageParamUnion, toolCallBack func(functionName string, arguments string) (string, error)) (string, []string, string, error) {
 
 	stopped := false
 	results := []string{}

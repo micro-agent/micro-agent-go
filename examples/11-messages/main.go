@@ -117,7 +117,7 @@ func main() {
 		return s
 	}
 
-	msgs, _ := msg.MessagesToSlice(toolAgent.Params.Messages)
+	msgs, _ := msg.MessagesToSlice(toolAgent.GetMessages())
 	fmt.Println("Messages:")
 	// TODO: 🚧 work in progress
 	for _, msg := range msgs {

@@ -28,7 +28,7 @@ import (
 //   - Either callback returns a non-nil error
 //   - A stream error occurs
 //   - Stream closing fails
-func (agent *Agent) RunStreamWithReasoning(Messages []openai.ChatCompletionMessageParamUnion, contentCallback func(content string) error, reasoningCallback func(reasoning string) error) (string, string, error) {
+func (agent *BasicAgent) RunStreamWithReasoning(Messages []openai.ChatCompletionMessageParamUnion, contentCallback func(content string) error, reasoningCallback func(reasoning string) error) (string, string, error) {
 	// Preserve existing system messages from agent.Params
 	existingSystemMessages := []openai.ChatCompletionMessageParamUnion{}
 	for _, msg := range agent.Params.Messages {
