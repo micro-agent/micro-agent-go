@@ -61,3 +61,4 @@ func main() {
 	}
 }
 ```
+> By default the completion add the message to the conversation history. You can reset the list of the messages (🚧 WIP).
