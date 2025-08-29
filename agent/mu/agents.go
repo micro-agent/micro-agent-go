@@ -3,6 +3,7 @@ package mu
 import (
 	"context"
 	"github.com/openai/openai-go/v2"
+	"github.com/openai/openai-go/v2/shared"
 )
 
 // Agent is the interface for AI agents that can interact with OpenAI models and tools
@@ -20,6 +21,8 @@ type Agent interface {
 	SetResponseFormat(format openai.ChatCompletionNewParamsResponseFormatUnion)
 	GetName() string
 	SetName(name string)
+	GetModel() shared.ChatModel
+	SetModel(model shared.ChatModel)
 }
 
 // BasicAgent represents a basic implementation of Agent with OpenAI client configuration and UI properties
@@ -143,4 +146,14 @@ func (agent *BasicAgent) GetName() string {
 // SetName sets the name of the agent
 func (agent *BasicAgent) SetName(name string) {
 	agent.Name = name
+}
+
+// GetModel returns the model from the agent's parameters
+func (agent *BasicAgent) GetModel() shared.ChatModel {
+	return agent.Params.Model
+}
+
+// SetModel sets the model in the agent's parameters
+func (agent *BasicAgent) SetModel(model shared.ChatModel) {
+	agent.Params.Model = model
 }
