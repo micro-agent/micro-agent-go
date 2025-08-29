@@ -3,7 +3,7 @@ module structured-json-complex-list-output
 go 1.24.4
 
 require (
-	github.com/micro-agent/micro-agent-go v0.0.7
+	github.com/micro-agent/micro-agent-go v0.0.8
 	github.com/openai/openai-go/v2 v2.1.1
 )
 
