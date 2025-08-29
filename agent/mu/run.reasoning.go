@@ -55,6 +55,11 @@ func (agent *BasicAgent) RunWithReasoning(Messages []openai.ChatCompletionMessag
 		//reasoning = strings.TrimSpace(reasoning)
 
 		content := completion.Choices[0].Message.Content
+
+		// PHC - 2025-08-29
+		// Append the full response as an assistant message to the agent's messages
+		agent.Params.Messages = append(agent.Params.Messages, openai.AssistantMessage(content))
+
 		return content, reasoning, nil
 	} else {
 		return "", "", errors.New("no choices found")

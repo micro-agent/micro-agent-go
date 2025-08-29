@@ -67,5 +67,9 @@ func (agent *BasicAgent) RunStream(Messages []openai.ChatCompletionMessageParamU
 		return response, err
 	}
 
+	// PHC - 2025-08-29
+	// Append the full response as an assistant message to the agent's messages
+	agent.Params.Messages = append(agent.Params.Messages, openai.AssistantMessage(response))
+
 	return response, nil
 }

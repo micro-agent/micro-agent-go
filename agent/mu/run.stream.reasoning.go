@@ -9,7 +9,6 @@ import (
 
 // 🚧 Work In Progress
 
-
 // RunStreamWithReasoning. executes a streaming chat completion with the given messages.
 // It streams the response content and reasoning in real-time by calling the provided callbacks for each chunk.
 // The complete response content and reasoning are also accumulated and returned at the end.
@@ -93,6 +92,10 @@ func (agent *BasicAgent) RunStreamWithReasoning(Messages []openai.ChatCompletion
 	if err := stream.Close(); err != nil {
 		return response, reasoning, err
 	}
+
+	// PHC - 2025-08-29
+	// Append the full response as an assistant message to the agent's messages
+	agent.Params.Messages = append(agent.Params.Messages, openai.AssistantMessage(response))
 
 	return response, reasoning, nil
 }

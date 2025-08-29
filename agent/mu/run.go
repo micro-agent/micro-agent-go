@@ -37,9 +37,12 @@ func (agent *BasicAgent) Run(Messages []openai.ChatCompletionMessageParamUnion) 
 	}
 
 	if len(completion.Choices) > 0 {
+		// PHC - 2025-08-29
+		// Append the full response as an assistant message to the agent's messages
+		agent.Params.Messages = append(agent.Params.Messages, openai.AssistantMessage(completion.Choices[0].Message.Content))
+
 		return completion.Choices[0].Message.Content, nil
 	} else {
 		return "", errors.New("no choices found")
-
 	}
 }

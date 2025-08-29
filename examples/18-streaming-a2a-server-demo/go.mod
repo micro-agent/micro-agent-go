@@ -3,7 +3,7 @@ module streaming-a2a-demo
 go 1.24.4
 
 require (
-	github.com/micro-agent/micro-agent-go v0.0.5
+	github.com/micro-agent/micro-agent-go v0.0.6
 	github.com/openai/openai-go/v2 v2.1.1
 )
 
