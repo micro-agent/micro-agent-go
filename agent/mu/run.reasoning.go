@@ -25,15 +25,15 @@ import (
 // contains no choices.
 func (agent *BasicAgent) RunWithReasoning(Messages []openai.ChatCompletionMessageParamUnion) (string, string, error) {
 	// Preserve existing system messages from agent.Params
-	existingSystemMessages := []openai.ChatCompletionMessageParamUnion{}
-	for _, msg := range agent.Params.Messages {
-		if msg.OfSystem != nil {
-			existingSystemMessages = append(existingSystemMessages, msg)
-		}
-	}
+	// existingSystemMessages := []openai.ChatCompletionMessageParamUnion{}
+	// for _, msg := range agent.Params.Messages {
+	// 	if msg.OfSystem != nil {
+	// 		existingSystemMessages = append(existingSystemMessages, msg)
+	// 	}
+	// }
 
 	// Combine existing system messages with new messages
-	agent.Params.Messages = append(existingSystemMessages, Messages...)
+	agent.Params.Messages = append(agent.Params.Messages, Messages...)
 	completion, err := agent.Client.Chat.Completions.New(agent.ctx, agent.Params)
 
 	if err != nil {

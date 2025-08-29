@@ -24,15 +24,15 @@ import (
 //   - Stream closing fails
 func (agent *BasicAgent) RunStream(Messages []openai.ChatCompletionMessageParamUnion, callBack func(content string) error) (string, error) {
 	// Preserve existing system messages from agent.Params
-	existingSystemMessages := []openai.ChatCompletionMessageParamUnion{}
-	for _, msg := range agent.Params.Messages {
-		if msg.OfSystem != nil {
-			existingSystemMessages = append(existingSystemMessages, msg)
-		}
-	}
+	// existingSystemMessages := []openai.ChatCompletionMessageParamUnion{}
+	// for _, msg := range agent.Params.Messages {
+	// 	if msg.OfSystem != nil {
+	// 		existingSystemMessages = append(existingSystemMessages, msg)
+	// 	}
+	// }
 
 	// Combine existing system messages with new messages
-	agent.Params.Messages = append(existingSystemMessages, Messages...)
+	agent.Params.Messages = append(agent.Params.Messages, Messages...)
 	stream := agent.Client.Chat.Completions.NewStreaming(agent.ctx, agent.Params)
 	var response string
 	var cbkRes error
