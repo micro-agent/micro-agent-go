@@ -68,7 +68,7 @@ func main() {
 	fmt.Println(strings.Repeat("-", 80))
 	question := "What is your name?"
 	fmt.Printf("🔍 Searching for similar chunks to '%s'\n", question)
-	questionEmbeddingVector, err := chatAgent.GenerateEmbeddingVector(question)
+	questionEmbeddingVector, _ := chatAgent.GenerateEmbeddingVector(question)
 
 	questionRecord := rag.VectorRecord{
 		Embedding: questionEmbeddingVector,
@@ -85,7 +85,7 @@ func main() {
 	fmt.Println(strings.Repeat("-", 80))
 	question = "Tell me about your family"
 	fmt.Printf("🔍 Searching for similar chunks to '%s'\n", question)
-	questionEmbeddingVector, err = chatAgent.GenerateEmbeddingVector(question)
+	questionEmbeddingVector, _ = chatAgent.GenerateEmbeddingVector(question)
 
 	questionRecord = rag.VectorRecord{
 		Embedding: questionEmbeddingVector,

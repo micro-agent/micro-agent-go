@@ -16,7 +16,18 @@ type Agent interface {
 	DetectToolCallsStream(messages []openai.ChatCompletionMessageParamUnion, toolCallback func(functionName string, arguments string) (string, error), streamCallback func(content string) error) (string, []string, string, error)
 	GenerateEmbeddingVector(content string) ([]float64, error)
 	GetMessages() []openai.ChatCompletionMessageParamUnion
+	GetFirstNMessages(n int) []openai.ChatCompletionMessageParamUnion
+	GetLastNMessages(n int) []openai.ChatCompletionMessageParamUnion
+	GetLastMessage() (openai.ChatCompletionMessageParamUnion, bool)
 	SetMessages(messages []openai.ChatCompletionMessageParamUnion)
+	AddMessage(message openai.ChatCompletionMessageParamUnion)
+	AddMessages(messages []openai.ChatCompletionMessageParamUnion)
+	PrependMessage(message openai.ChatCompletionMessageParamUnion)
+	PrependMessages(messages []openai.ChatCompletionMessageParamUnion)
+	ResetMessages()
+	RemoveLastMessage()
+	RemoveLastNMessages(n int)
+	RemoveFirstMessage()
 	GetResponseFormat() openai.ChatCompletionNewParamsResponseFormatUnion
 	SetResponseFormat(format openai.ChatCompletionNewParamsResponseFormatUnion)
 	GetName() string
@@ -118,15 +129,6 @@ func WithEmbeddingParams(embeddingParams openai.EmbeddingNewParams) AgentOption 
 	}
 }
 
-// GetMessages returns the messages from the agent's parameters
-func (agent *BasicAgent) GetMessages() []openai.ChatCompletionMessageParamUnion {
-	return agent.Params.Messages
-}
-
-// SetMessages sets the messages in the agent's parameters
-func (agent *BasicAgent) SetMessages(messages []openai.ChatCompletionMessageParamUnion) {
-	agent.Params.Messages = messages
-}
 
 // GetResponseFormat returns the response format from the agent's parameters
 func (agent *BasicAgent) GetResponseFormat() openai.ChatCompletionNewParamsResponseFormatUnion {

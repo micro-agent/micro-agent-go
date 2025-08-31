@@ -16,7 +16,7 @@ import (
 //   - string: The content of the first choice from the model's response
 //   - error: Any error that occurred during the completion request or if no choices are returned
 //
-// This method temporarily sets the agent's Messages parameter and makes a synchronous
+// This method sets the agent's Messages parameter (the messages are added and kept) and makes a synchronous
 // completion request. It returns an error if the completion fails or if the response
 // contains no choices.
 func (agent *BasicAgent) Run(Messages []openai.ChatCompletionMessageParamUnion) (string, error) {
