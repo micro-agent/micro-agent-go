@@ -34,6 +34,10 @@ type Agent interface {
 	SetName(name string)
 	GetModel() shared.ChatModel
 	SetModel(model shared.ChatModel)
+	GetDescription() string
+	SetDescription(description string)
+	GetMetaData() any
+	SetMetaData(metaData any)
 }
 
 // BasicAgent represents a basic implementation of Agent with OpenAI client configuration and UI properties
@@ -45,6 +49,8 @@ type BasicAgent struct {
 	Name            string
 	Avatar          string
 	Color           string // used for UI display
+	Description     string
+	MetaData        any
 }
 
 // AgentOption is a functional option for configuring BasicAgent instances
@@ -158,4 +164,24 @@ func (agent *BasicAgent) GetModel() shared.ChatModel {
 // SetModel sets the model in the agent's parameters
 func (agent *BasicAgent) SetModel(model shared.ChatModel) {
 	agent.Params.Model = model
+}
+
+// GetDescription returns the description of the agent
+func (agent *BasicAgent) GetDescription() string {
+	return agent.Description
+}
+
+// SetDescription sets the description of the agent
+func (agent *BasicAgent) SetDescription(description string) {
+	agent.Description = description
+}
+
+// GetMetaData returns the metadata of the agent
+func (agent *BasicAgent) GetMetaData() any {
+	return agent.MetaData
+}
+
+// SetMetaData sets the metadata of the agent
+func (agent *BasicAgent) SetMetaData(metaData any) {
+	agent.MetaData = metaData
 }

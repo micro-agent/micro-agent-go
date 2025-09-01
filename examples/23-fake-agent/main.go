@@ -18,6 +18,26 @@ type FakeAgent struct {
 	responseFormat openai.ChatCompletionNewParamsResponseFormatUnion
 }
 
+// GetDescription implements mu.Agent.
+func (f *FakeAgent) GetDescription() string {
+	panic("unimplemented")
+}
+
+// GetMetaData implements mu.Agent.
+func (f *FakeAgent) GetMetaData() any {
+	panic("unimplemented")
+}
+
+// SetDescription implements mu.Agent.
+func (f *FakeAgent) SetDescription(description string) {
+	panic("unimplemented")
+}
+
+// SetMetaData implements mu.Agent.
+func (f *FakeAgent) SetMetaData(metaData any) {
+	panic("unimplemented")
+}
+
 // AddMessage implements mu.Agent.
 func (f *FakeAgent) AddMessage(message openai.ChatCompletionMessageParamUnion) {
 	panic("unimplemented")
