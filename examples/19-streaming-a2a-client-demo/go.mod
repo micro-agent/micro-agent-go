@@ -2,7 +2,7 @@ module stream-talk-to-agent
 
 go 1.24.4
 
-require github.com/micro-agent/micro-agent-go v0.1.0
+require github.com/micro-agent/micro-agent-go v0.1.1
 
 replace github.com/micro-agent/micro-agent-go => ../..
 

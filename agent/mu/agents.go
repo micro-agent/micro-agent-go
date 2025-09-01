@@ -87,6 +87,38 @@ func NewAgent(ctx context.Context, name string, options ...AgentOption) (Agent, 
 	return agent, nil
 }
 
+// NewAgentWithDescription creates a new Agent instance with the specified name and description.
+// It uses the functional options pattern to configure the agent's client, parameters, and other settings.
+//
+// Parameters:
+//   - ctx: Context for managing the agent's lifecycle and cancellation
+//   - name: Human-readable name for the agent (used for identification/logging)
+//   - description: Description of the agent's purpose or capabilities
+//   - options: Variable number of AgentOption functions to configure the agent
+//
+// Returns:
+//   - Agent: Configured agent instance ready for use
+//   - error: Always nil in current implementation, reserved for future validation
+//
+// Example usage:
+//
+//	agent, err := NewAgentWithDescription(ctx, "ChatBot", "A helpful AI assistant",
+//	  WithClient(openaiClient),
+//	  WithParams(completionParams),
+//	)
+func NewAgentWithDescription(ctx context.Context, name string, description string, options ...AgentOption) (Agent, error) {
+	agent := &BasicAgent{}
+	agent.Name = name
+	agent.Description = description
+	agent.ctx = ctx
+	// Apply all options
+	for _, option := range options {
+		option(agent)
+	}
+
+	return agent, nil
+}
+
 // WithClient is a functional option that sets the OpenAI client for an agent.
 // The client handles the connection to the OpenAI API or compatible endpoints.
 //
